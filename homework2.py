@@ -33,17 +33,14 @@ async def get_user(request: Request, user_id: int) -> HTMLResponse:
 
 @app.post('/user/{username}/{age}')
 async def add_in_dict(
-        user: User,
         username: Annotated[str, Path(min_length=5, max_length=20, description='Enter username', example='DariDari')],
         age: Annotated[int, Path(ge=18, le=120, description='Enter age', example='27')]) -> User:
     if users:
-        user.id = users[-1].id + 1
+        edit_user = User(id = users[-1].id + 1, username = username, age = age)
     else:
-        user.id = 1
-    user.username = username
-    user.age = age
-    users.append(user)
-    return user
+        edit_user = User(id = 1, username = username, age = age)
+    users.append(edit_user)
+    return edit_user
 
 
 @app.put('/user/{user_id}/{username}/{age}')
